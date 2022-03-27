@@ -1,0 +1,56 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/home-assistant:stable
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+    environment:
+      - DISABLE_JEMALLOC=true
+    # devices:
+    #   - /dev/ttyUSB0:/dev/ttyUSB0 
+    #   - /dev/ttyUSB1:/dev/ttyUSB1
+    volumes:
+      - ./config/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - public
+      - app
+      - data
+    ports:
+      - 8123:8123
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE=homeassistant
+      - MYSQL_ROOT_PASSWORD
+    volumes:
+      - ./data/recorder:/var/lib/mysql
+    networks:
+      - data
+    ports:
+      - 3306:3306
+  nodered:
+    container_name: nodered
+    build: ./containers/nodered/
+    depends_on:
+      - homeassistant
+    restart: unless-stopped
+    environment:
+      - NODE_RED_CREDENTIAL_SECRET
+    volumes:
+      - ./config/nodered:/data
+    networks:
+      - app
+    ports:
+      - 1880:1880
+networks:
+  public:
+    driver: bridge
+  data:
+  app:

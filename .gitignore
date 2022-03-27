@@ -1,0 +1,36 @@
+# macOS resource files
+.DS_Store
+
+# Decrypted Secrets Files
+config/homeassistant/secrets.yaml
+config/homeassistant/options.xml
+
+# Non-declarative config files
+config/homeassistant/.storage
+config/homeassistant/.cloud
+config/homeassistant/harmony_*.conf
+config/homeassistant/zwscene.xml
+config/homeassistant/zwcfg_*.xml
+
+# Version Mutex
+config/homeassistant/.HA_VERSION
+
+# Database files
+config/homeassistant/home-assistant_v2.db
+config/homeassistant/home-assistant_v2.db-*
+config/homeassistant/pyozw.sqlite
+config/homeassistant/zigbee.db
+data/recorder/*
+!data/recorder/.gitkeep
+
+# Backups
+backup-*.tar.gz.gpg
+
+# Log Files
+config/homeassistant/home-assistant.log
+config/homeassistant/home-assistant.log.*
+config/homeassistant/OZW_Log.txt
+
+# Ephemeral Files
+config/nodered/.config.runtime.json
+config/nodered/flows_*.json
