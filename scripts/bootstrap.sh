@@ -59,7 +59,8 @@ function install_sops() {
 }
 
 function create_service_account() {
-  sudo useradd -s /bin/bash -d /home/ha/ -m -G ha ha
+  sudo addgroup ha
+  sudo useradd -s /bin/bash -d /home/ha/ -m -g ha ha
 }
 
 function clone_repo() {
