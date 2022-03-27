@@ -1,24 +1,21 @@
 #!/usr/bin/env bash
 
-function stop_containers() {
-  docker-compose stop
-}
+set -e
 
-function reset_image_cache() {
-  docker-compose rm -f
-}
-
-function pull_latest_images() {
-  docker-compose pull
-}
+SCRIPT_PATH="$(
+  cd "$(dirname "${BASH_SOURCE[0]}")"
+  pwd -P
+)"
 
 function main() {
   set -x;
-  stop_containers
-  reset_image_cache
-  pull_latest_images
+  sudo systemctl stop home-automation.service
+  pushd "$SCRIPT_PATH/../"
+    docker-compose rm -f
+    docker-compose pull
+  popd
+  sudo systemctl start home-automation.service
   set +x;
-  ./start.sh
 }
 
 main "$@"

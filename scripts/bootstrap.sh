@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x;
-
 function get_latest_git_release() {
   local -r repository_url="$1"
   local -r tag=$(curl -sSL --head "$repository_url/releases/latest" | grep 'location:' | sed -e "s|location: $repository_url/releases/tag/||" | tr -d '\r')
@@ -77,6 +75,7 @@ function install_service() {
 }
 
 function main() {
+  set -x;
   update_system
   install_dependencies
   install_docker
@@ -85,6 +84,7 @@ function main() {
   create_service_account
   clone_repo
   install_service
+  set +x;
 
   echo ""
   echo "The server was bootstrapped successfully."
