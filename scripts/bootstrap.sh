@@ -4,8 +4,8 @@ set -x;
 
 function get_latest_git_release() {
   local -r repository_url="$1"
-  local -r tag=$(curl --head "$repository_url/releases/latest" | grep 'location:' | sed -e "s|location: $repository_url/releases/tag/||")
-  printf "%s" "$(xargs "$tag")"
+  local -r tag=$(curl -sSL --head "$repository_url/releases/latest" | grep 'location:' | sed -e "s|location: $repository_url/releases/tag/||" | tr -d '\r')
+  printf "%s" "$tag"
 }
 
 function update_system() {
