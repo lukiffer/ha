@@ -35,7 +35,7 @@ function install_docker() {
   sudo apt-get update
   sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-  sudo usermod -aG docker "${USER}"
+  sudo usermod -aG docker "$USER"
 }
 
 function install_docker_compose() {
@@ -58,13 +58,14 @@ function install_sops() {
 
 function create_service_account() {
   sudo addgroup ha
+  sudo usermod -aG ha "$USER"
   sudo useradd -s /bin/bash -d /home/ha/ -m -g ha ha
 }
 
 function clone_repo() {
   local -r install_path="/opt/ha/"
   sudo mkdir -p "$install_path"
-  sudo chown -R "$USER:$USER" "$install_path"
+  sudo chown "ha:ha" "$install_path"
   git clone "git@github.com:lukiffer/ha.git" "$install_path"
   sudo chown -R "ha:ha" "$install_path"
 }
