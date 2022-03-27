@@ -64,7 +64,8 @@ function create_service_account() {
 function clone_repo() {
   local -r install_path="/opt/ha/"
   sudo mkdir -p "$install_path"
-  sudo git clone "git@github.com:lukiffer/ha.git" "$install_path"
+  sudo chown -R "$USER:$USER" "$install_path"
+  git clone "git@github.com:lukiffer/ha.git" "$install_path"
   sudo chown -R "ha:ha" "$install_path"
 }
 
