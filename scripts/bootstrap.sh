@@ -75,10 +75,6 @@ function install_service() {
   sudo systemctl enable home-automation.service
 }
 
-function start_service() {
-  sudo systemctl start home-automation.service
-}
-
 function main() {
   update_system
   install_dependencies
@@ -88,7 +84,15 @@ function main() {
   create_service_account
   clone_repo
   install_service
-  start_service
+
+  echo ""
+  echo "The server was bootstrapped successfully."
+  echo "Before starting the service, you'll need to generate/add an SSH key that has access to the config submodule repository."
+  echo "Then inside /opt/ha/ run:"
+  echo "    git submodule update --init --recursive"
+  echo "Then start the service by running:"
+  echo "    sudo systemctl start home-automation.service"
+  echo ""
 }
 
 main "$@"
