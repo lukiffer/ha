@@ -38,6 +38,7 @@ services:
   nodered:
     container_name: nodered
     build: ./containers/nodered/
+    user: root
     depends_on:
       - homeassistant
     restart: unless-stopped
