@@ -51,7 +51,7 @@ function main() {
   init_mysql_secrets
   init_node_red_secrets
 
-  docker-compose up --build
+  docker-compose -f "$SCRIPT_PATH/../docker-compose.yaml" up --build
   set +x;
 }
 
