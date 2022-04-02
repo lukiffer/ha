@@ -61,6 +61,9 @@ function create_service_account() {
   sudo usermod -aG ha "$USER"
   sudo useradd -s /bin/bash -d /home/ha/ -m -g ha ha
 
+  # Add service account to the docker group
+  sudo usermod -aG docker ha
+
   # Initialize GPG keyring for the new user
   sudo -u ha gpg --list-keys
 }
