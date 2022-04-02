@@ -35,6 +35,14 @@ pull your configuration to the expected location.
 If you've already done this in your fork of this repository, you can simply run `git submodule update --init --recursive`
 when needed.
 
+```bash
+# As the ha user
+sudo -iu ha -H
+
+# Import the GPG key used to encrypt secrets.yaml in your config
+gpg --batch --yes --no-tty --always-trust --import < /path/to/key.asc
+```
+
 ### Configuring SOPS
 
 The sensitive values typically stored in `secrets.yaml` for Home Assistant are assumed to be
