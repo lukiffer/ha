@@ -89,7 +89,7 @@ function generate_ssh_key() {
   sudo mkdir -p "$key_path"
   sudo chown -R "ha:ha" "$key_path"
   sudo chmod -R 700 "$key_path"
-  sudo -u ha ssh-keygen -t rsa -f "${key_path}/id_rsa" -N ''
+  sudo -u ha ssh-keygen -t rsa -f "$key_path/id_rsa" -N ''
 }
 
 function main() {
