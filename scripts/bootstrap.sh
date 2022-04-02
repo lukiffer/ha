@@ -20,6 +20,7 @@ function install_dependencies() {
   sudo apt-get install -y \
     ca-certificates \
     curl \
+    git-crypt \
     gnupg \
     lsb-release
 }
