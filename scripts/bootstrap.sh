@@ -66,8 +66,9 @@ function clone_repo() {
   local -r install_path="/opt/ha/"
   sudo mkdir -p "$install_path"
   sudo chown "ha:ha" "$install_path"
+  sudo -iu ha -H
   git clone "git@github.com:lukiffer/ha.git" "$install_path"
-  sudo chown -R "ha:ha" "$install_path"
+  exit
 }
 
 function install_service() {
