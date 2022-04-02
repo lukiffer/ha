@@ -60,6 +60,9 @@ function create_service_account() {
   sudo addgroup ha
   sudo usermod -aG ha "$USER"
   sudo useradd -s /bin/bash -d /home/ha/ -m -g ha ha
+
+  # Initialize GPG keyring for the new user
+  sudo -u ha gpg --list-keys
 }
 
 function clone_repo() {
@@ -77,6 +80,12 @@ function install_service() {
   sudo systemctl enable home-automation.service
 }
 
+function generate_ssh_key() {
+  local -r key_path="/home/ha/.ssh/"
+  sudo mkdir -p "$key_path"
+  sudo -u ha ssh-keygen -t rsa -f "$key_path/id_rsa" -N ''
+}
+
 function main() {
   set -x;
   update_system
@@ -87,13 +96,22 @@ function main() {
   create_service_account
   clone_repo
   install_service
+  generate_ssh_key
   set +x;
 
   echo ""
   echo "The server was bootstrapped successfully."
-  echo "Before starting the service, you'll need to generate/add an SSH key that has access to the config submodule repository."
-  echo "Then inside /opt/ha/ run:"
+  echo ""
+  echo "Before starting the service, you'll need to add the following SSH key to a GitHub account that access to the config submodule repository:"
+  echo ""
+  cat /home/ha/.ssh/id_rsa.pub
+  echo ""
+  echo "Then inside /opt/ha/ run, initialize the config submodule:"
   echo "    git submodule update --init --recursive"
+  echo ""
+  echo "Then, import the GPG private key used by SOPS to encrypt the secrets file:"
+  echo "    gpg --batch --yes --no-tty --always-trust --import < /path/to/key.asc"
+  echo ""
   echo "Then start the service by running:"
   echo "    sudo systemctl start home-automation.service"
   echo ""
