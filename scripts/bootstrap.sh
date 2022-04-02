@@ -110,7 +110,7 @@ function main() {
   echo ""
   echo "Before starting the service, you'll need to add the following SSH key to a GitHub account that access to the config submodule repository:"
   echo ""
-  cat /home/ha/.ssh/id_rsa.pub
+  sudo cat /home/ha/.ssh/id_rsa.pub
   echo ""
   echo "Then inside /opt/ha/ run, initialize the config submodule:"
   echo "    git submodule update --init --recursive"
