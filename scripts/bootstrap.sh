@@ -70,8 +70,12 @@ function clone_repo() {
   sudo mkdir -p "$install_path"
   sudo chown "ha:ha" "$install_path"
   sudo -u ha git clone "https://github.com/lukiffer/ha.git" "$install_path"
-  sudo -u "$USER" git remote remove origin
-  sudo -u "$USER" git remote add origin "git@github.com:lukiffer/ha.git"
+  set -e;
+  pushd /opt/ha/
+    sudo -u ha git remote remove origin
+    sudo -u ha git remote add origin "git@github.com:lukiffer/ha.git"
+  popd
+  set +e;
 }
 
 function install_service() {
@@ -84,7 +88,7 @@ function generate_ssh_key() {
   local -r key_path="/home/ha/.ssh/"
   sudo mkdir -p "$key_path"
   sudo chown -R "ha:ha" "$key_path"
-  sudo chmod 700 "$key_path"
+  sudo chmod -R 700 "$key_path"
   sudo -u ha ssh-keygen -t rsa -f "${key_path}/id_rsa" -N ''
 }
 
