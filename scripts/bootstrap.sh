@@ -67,14 +67,8 @@ function clone_repo() {
   sudo mkdir -p "$install_path"
   sudo chown "ha:ha" "$install_path"
   sudo -u ha git clone "https://github.com/lukiffer/ha.git" "$install_path"
-  set -e
-  pushd "$install_path"
-    git remote remove origin
-    git remote add origin git@github.com:lukiffer/ha.git
-    git remote -v
-  popd
-  set +e
-  exit
+  sudo -u "$USER" git remote remove origin
+  sudo -u "$USER" git remote add origin "git@github.com:lukiffer/ha.git"
 }
 
 function install_service() {
