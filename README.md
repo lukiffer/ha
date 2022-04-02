@@ -15,7 +15,7 @@ curl -sSL https://raw.githubusercontent.com/lukiffer/ha/main/scripts/bootstrap.s
 ```
 
 This script will install all the necessary prerequisites and clone this repository to `/opt/ha/`. **Before starting the**
-**service you must configure the submodule that contains your config.**
+**service you must configure the submodule that contains your config and import the GPG used to encrypt your secrets.**
 
 ### Changing the `config` Submodule URL
 
@@ -24,34 +24,36 @@ The included submodule layout assumes a repository with the following file struc
 ```
 (root)
   ├─ homeassistant/
+  ├─ nginx/
   ╰─ nodered/
 ```
 
 Where each directory is the configuration root of the respective application.
 
-You can update `.gitmodules` to point at your copy of such a repository and then run `git submodule sync --recursive` to
-pull your configuration to the expected location.
+- You can update `.gitmodules` to point at your copy of such a repository and then run:
+  ```bash
+  git submodule sync --recursive
+  ```
+- If you've already done this in your fork of this repository, you can simply run:
+  ```bash
+  git submodule update --init --recursive
+  ```
 
-If you've already done this in your fork of this repository, you can simply run `git submodule update --init --recursive`
-when needed.
+**Note that you may be required to logout and back in if you're running in the same shell session that was use to run**
+**the bootstrap script – your group membership will not be current in that session.**
+
+### Importing GPG Key
+
+Import the GPG key used to encrypt the secrets in your configuration repository.
 
 ```bash
-# As the ha user
-sudo -iu ha -H
-
 # Import the GPG key used to encrypt secrets.yaml in your config
-gpg --batch --yes --no-tty --always-trust --import < /path/to/key.asc
+sudo -u ha gpg --batch --yes --no-tty --always-trust --import < /path/to/key.asc
 ```
-
-### Configuring SOPS
-
-The sensitive values typically stored in `secrets.yaml` for Home Assistant are assumed to be
-[SOPS](https://github.com/mozilla/sops)-encrypted. You'll need to configure any credentials required for SOPS to be
-available to the `ha` service account.
 
 ### Starting the Service
 
-Once you've configured the `config` submodule and configured SOPS, you can start the Compose stack by running:
+Once you've configured the `config` submodule and imported your GPG key, you can start the Compose stack by running:
 
 ```bash
 sudo systemctl start home-automation.service
