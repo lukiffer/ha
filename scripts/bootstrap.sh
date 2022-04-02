@@ -74,6 +74,7 @@ function clone_repo() {
   pushd /opt/ha/
     sudo -u ha git remote remove origin
     sudo -u ha git remote add origin "git@github.com:lukiffer/ha.git"
+    sudo -u ha git branch --set-upstream-to=origin/main main
   popd
   set +e;
 }
