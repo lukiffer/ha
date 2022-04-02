@@ -83,7 +83,9 @@ function install_service() {
 function generate_ssh_key() {
   local -r key_path="/home/ha/.ssh/"
   sudo mkdir -p "$key_path"
-  sudo -u ha ssh-keygen -t rsa -f "$key_path/id_rsa" -N ''
+  sudo chown -R "ha:ha" "$key_path"
+  sudo chmod 700 "$key_path"
+  sudo -u ha ssh-keygen -t rsa -f "${key_path}/id_rsa" -N ''
 }
 
 function main() {
