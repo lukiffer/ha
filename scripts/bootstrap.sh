@@ -25,6 +25,11 @@ function install_dependencies() {
     lsb-release
 }
 
+function install_yq() {
+  # Install yq
+  sudo curl -fsSL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
+}
+
 function install_docker() {
   # Install Docker
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg

@@ -42,18 +42,9 @@ Where each directory is the configuration root of the respective application.
 **Note that you may be required to logout and back in if you're running in the same shell session that was use to run**
 **the bootstrap script – your group membership will not be current in that session.**
 
-### Importing GPG Key
-
-Import the GPG key used to encrypt the secrets in your configuration repository.
-
-```bash
-# Import the GPG key used to encrypt secrets.yaml in your config
-sudo -u ha gpg --batch --yes --no-tty --always-trust --import < /path/to/key.asc
-```
-
 ### Starting the Service
 
-Once you've configured the `config` submodule and imported your GPG key, you can start the Compose stack by running:
+Once you've configured the `config` submodule, you can start the Compose stack by running:
 
 ```bash
 sudo systemctl start home-automation.service
@@ -74,16 +65,8 @@ sudo /opt/ha/scripts/update.sh
 ### Backup and restore
 
 All declarative configuration files are assumed to be stored in source control (in the `config` submodule). You can use
-the `backup.sh` script to capture a signed, encrypted backup of non-declarative configuration files. These are files
-that, while they do contain configuration values, are not declarative and are mutated by the system that uses them.
+the `backup.sh` script to capture a signed, encrypted backup of all configuration paths.
 
 ```bash
-./backup.sh --gpg-key <GPG_KEY_ID>
-```
-
-Use the `restore.sh` script to restore a backup over the existing file structure. It is recommended that you first
-backup the existing files using the instructions above.
-
-```bash
-./restore.sh path/to/backup.tar.gz.gpg
+/opt/ha/scripts/backup.sh --gpg-key <GPG_KEY_ID>
 ```

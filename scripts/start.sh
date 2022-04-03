@@ -11,23 +11,7 @@ readonly HOME_ASSISTANT_CONFIG_PATH="$SCRIPT_PATH/../config/homeassistant"
 
 function read_secret() {
   local -r property_key="$1"
-  sops --decrypt --extract "[\"$property_key\"]" "$HOME_ASSISTANT_CONFIG_PATH/secrets.encrypted.yaml"
-}
-
-function decrypt_secrets_file() {
-  local -r source_path="$1"
-  local -r type="${2:-yaml}"
-  local -r dest_path=${source_path/.encrypted/}
-  sops --decrypt --input-type "$type" --output-type "$type" "$source_path" > "$dest_path"
-}
-
-function init_homeassistant_secrets() {
-  decrypt_secrets_file "$HOME_ASSISTANT_CONFIG_PATH/secrets.encrypted.yaml"
-}
-
-function init_zwave_secrets() {
-  ZWAVE_NETWORK_KEY=$(read_secret "zwave_network_key")
-  sed -e "s/{{ZWAVE_NETWORK_KEY}}/$ZWAVE_NETWORK_KEY/" "$HOME_ASSISTANT_CONFIG_PATH/options.tpl.xml" > "$HOME_ASSISTANT_CONFIG_PATH/options.xml"
+  yq ".$property_key" < "$HOME_ASSISTANT_CONFIG_PATH/secrets.yaml"
 }
 
 function init_mysql_secrets() {
@@ -46,8 +30,6 @@ function init_node_red_secrets() {
 
 function main() {
   set -x;
-  init_homeassistant_secrets
-  init_zwave_secrets
   init_mysql_secrets
   init_node_red_secrets
 
