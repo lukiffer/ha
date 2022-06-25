@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+function sudo_apt() {
+  sudo DEBIAN_FRONTEND=noninteractive apt-get "$@"
+}
+
 function get_latest_git_release() {
   local -r repository_url="$1"
   local -r tag=$(curl -sSL --head "$repository_url/releases/latest" | grep 'location:' | sed -e "s|location: $repository_url/releases/tag/||" | tr -d '\r')
@@ -8,18 +12,19 @@ function get_latest_git_release() {
 
 function update_system() {
   # Get latest package manifests
-  sudo apt-get update
+  sudo_apt update
+
+  # Upgrade system
+  sudo_apt dist-upgrade -y
 
   # Upgrade packages
-  sudo apt-get upgrade -y
+  sudo_apt upgrade -y
 }
 
 function install_dependencies() {
   # Install prerequisite packages
-  sudo apt-get update
-  sudo apt-get install -y \
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     ca-certificates \
-    curl \
     git-crypt \
     gnupg \
     lsb-release
@@ -38,8 +43,8 @@ function install_docker() {
     "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-  sudo apt-get update
-  sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+  sudo_apt update
+  sudo_apt install -y docker-ce docker-ce-cli containerd.io
 
   sudo usermod -aG docker "$USER"
 }
