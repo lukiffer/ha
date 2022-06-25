@@ -84,6 +84,7 @@ function clone_repo() {
   sudo mkdir -p "$install_path"
   sudo chown "ha:ha" "$install_path"
   sudo -u ha git clone "https://github.com/lukiffer/ha.git" "$install_path"
+  git config --global --add safe.directory "$install_path"
 }
 
 function install_service() {
