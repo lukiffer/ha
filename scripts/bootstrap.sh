@@ -108,6 +108,7 @@ function main() {
   install_docker
   install_docker_compose
   install_sops
+  install_yq
   create_service_account
   clone_repo
   install_service
